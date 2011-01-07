@@ -1,0 +1,84 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+    <title>TMRD Remote</title>
+    <style type="text/css" media="Screen" >
+      html, body
+      {
+        font: 12px/15px sans-serif;
+        background: #fff;
+        padding: 3px;
+        color: #000;
+        margin: 0;
+      }
+      button
+      {
+        width: 200px;
+        height: 50px;
+      }
+    </style>
+    <style type="text/css" media="handheld" >
+      /* CSS Mobile Reset */
+      html, body
+      {
+        margin: 0;
+        padding: 0; 
+        border: 0;
+      }
+      body 
+      {
+        font-family:Arial,  sans-serif;
+        line-height:1.5;
+        font-size:16px;
+        background: #fff;
+        padding:5px;
+        color: #000;
+        word-wrap: break-word;
+        -webkit-text-size-adjust: none;
+      }
+      button
+      {
+        width: 200px;
+        height: 50px;
+      }
+      h1, h2, h3, h4, h5, h6{ font-weight: normal; }
+      p img { float: left; margin: 0 10px 5px 0; padding: 0; }
+      img { border: 0; max-width: 100%; }
+      table { width:auto; border-collapse: collapse;border-spacing: 0; }
+    </style>
+    <script type="text/javascript">
+      function callServer(cmd)
+      {
+        xmlhttp=new XMLHttpRequest();
+        xmlhttp.onreadystatechange=function()
+        {
+          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            if (xmlhttp.responseText=="fail")
+              alert("Can't find tmrd process");
+        }
+        xmlhttp.open("POST", cmd, true);
+        xmlhttp.send();
+      }
+      function increase()
+      {
+        callServer("/increase");
+      }
+      function decrease()
+      {
+        callServer("/decrease");
+      }
+    </script>
+
+  </head>
+  <body>
+    <h2>
+    <p>Tim's Merrill Reese Delayer Remote</p>
+    <p>
+    <p>
+    <p><button type="button" onclick="increase()">Increase</button></p>
+    <p>
+    <p>
+    <p><button type="button" onclick="decrease()">Decrease</button></p>
+    </h2>
+  </body>
+</html>

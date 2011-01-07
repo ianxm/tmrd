@@ -1,0 +1,51 @@
+tmrd - a simple sound delayer
+
+OVERVIEW
+
+tmrd takes sound card input (from mic or line in), delays it, and
+passes it to a sound card output (speakers or line out).  tmrd stands
+for "Tim's Merrill Reese Delayer."  It was written so Tim could delay
+Merrill Reese's radio play by play to synchronize it with the Eagle's
+broadcast on tv.  tmrd could theoretically be used to delay other
+audio streams, but to my knowledge it's never been tried.
+
+INSTALLATION
+
+tmrd uses the Jack Audio Connection Kit (http://jackit.sf.net).
+
+The following packages are required to compile tmrd:
+- libjack-dev
+- libncurses5-dev
+
+The following packages are required to run tmrd:
+- jackd
+
+jackd must be running before tmrd can be started.  If you use alsa,
+you can start jackd with:
+> jackd -d alsa
+
+Then start tmrd with:
+> tmrd
+
+INSTRUCTIONS
+
+When tmrd opens it immediately starts delaying the input stream.  The
+console displays the current delay in seconds, and the available
+commands.  The up and down arrow keys change the delay time.  The 'q'
+key closes tmrd.
+
+tmrd will read from the default input stream (line in or mic) and
+write to the default output stream (line out or spkr).  These defaults
+can be set in the alsa configuration.
+
+REMOTE CONTROL
+
+Optionally, a small webserver can be used to control tmrd from a
+laptop or smartphone.  The server must be run on the machine hosting
+tmrd.  To start the webserver, run:
+
+> python tmrd_server.py
+
+from the server directory.  To access the server, browse to port 8000
+of the machine on which it is running.  Close the webserver with
+ctrl-c.
