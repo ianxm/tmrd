@@ -204,13 +204,13 @@ void run_ui()
 }
 
 /*
-  increase delay on sigrtmin (34 on my system)
-  decrease on sigrtmin+1
+  increase delay on sigusr1
+  decrease on sigusr2
   the signal counts as stdin input, so it automatically updates the display
 */
 void sig_handler(int signum)
 {
-  if( signum==SIGRTMIN )
+  if( signum==SIGUSR1 )
     new_delay += 1;
   else
     new_delay -= 1;
@@ -221,6 +221,6 @@ void attach_sig_handler()
   struct sigaction handler;
   handler.sa_handler = sig_handler;
   handler.sa_flags = SA_NOMASK;
-  sigaction(SIGRTMIN+0, &handler, NULL);
-  sigaction(SIGRTMIN+1, &handler, NULL);
+  sigaction(SIGUSR1, &handler, NULL);
+  sigaction(SIGUSR2, &handler, NULL);
 }

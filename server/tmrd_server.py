@@ -16,7 +16,7 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import subprocess, os
+import subprocess, os, signal
 import BaseHTTPServer
 
 class TmrdRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
@@ -27,9 +27,9 @@ class TmrdRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             s.wfile.write("fail")
         else:
             if s.path == '/increase':
-                os.kill(tmrd_pid, 34)
+                os.kill(tmrd_pid, signal.SIGUSR1)
             elif s.path == '/decrease':
-                os.kill(tmrd_pid, 35)
+                os.kill(tmrd_pid, signal.SIGUSR2)
             s.send_hdr("text")
             s.wfile.write("ok");
 
