@@ -39,9 +39,12 @@ unsigned int delay_time = 25;	/* in tenths of seconds */
 int new_delay;
 jack_default_audio_sample_t **buffer; /* the buffers */
 
+char VERSION[4] = "2.0";
 void run_ui();
 void sig_handler(int signum);
 void attach_sig_handler();
+void parseArgs();
+void printHelp();
 
 int process (jack_nframes_t nframes, void *arg)
 {
@@ -99,6 +102,9 @@ void jack_shutdown (void *arg)
  
 int main (int argc, char *argv[])
 {
+  fprintf(stderr, "tmrd v%s\n", VERSION);
+  parseArgs(argc, argv);
+
   attach_sig_handler();
 
   jack_client_t *client;
@@ -201,6 +207,48 @@ void run_ui()
     mvprintw(8,0,"current delay: %.1lf seconds", delay_time/10.);
   }
   endwin();				/* End curses mode  */
+}
+
+/*
+  parse command line args
+ */
+void parseArgs(int argc, char *argv[])
+{
+  int ii = 1;
+  while( ii<argc )
+  {
+    if( strcmp(argv[ii], "-m")==0 )
+    {
+      max_delay_time = atof(argv[ii+1])*10;
+      ii += 2;
+    }
+    else if( strcmp(argv[ii], "-d")==0 )
+    {
+      delay_time = atoi(argv[ii+1])*10;
+      ii += 2;
+    }
+    else if( strcmp(argv[ii], "-h")==0 )
+    {
+      printHelp();
+      exit(0);
+    }
+    else if( strcmp(argv[ii], "-v")==0 )
+    {
+      exit(0);
+    }
+    else
+      printf("unknown arg: %s\n", argv[ii]);
+  }
+}
+
+void printHelp()
+{
+  fprintf(stderr, "Usage: tmrd [OPTION]\n");
+  fprintf(stderr, "Options:\n");
+  fprintf(stderr, "-m <arg>	set maximum delay to arg seconds\n");
+  fprintf(stderr, "-d <arg>	set initial delay to arg seconds\n");
+  fprintf(stderr, "-h		display this help text and exit\n");
+  fprintf(stderr, "-v		display version and exit\n");
 }
 
 /*
