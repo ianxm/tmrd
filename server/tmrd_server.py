@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 #
 #   tmrd - a simple sound delayer
 #   Copyright (C) 2009-2011 Ian Martins
@@ -16,8 +18,10 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import subprocess, os, signal
-import BaseHTTPServer
+import subprocess, os, signal, sys
+import BaseHTTPServer, getopt
+
+VERSION = "1.0"
 
 class TmrdRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_POST(s):
@@ -61,7 +65,31 @@ class TmrdRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         return int(ps_out.split(' ')[0])
         
 
+def printHelp():
+    print "Usage: tmrd_server [OPTION]"
+    print "Options:"
+    print "-p, --port <arg>    set port"
+    print "-h, --help          display this help text and exit"
+    print "-v, --version       display version and exit"
+
+# parse command line args
+print "tmrd_server.py v" + VERSION
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "p:hv", ["port=", "help", "version"])
+except getopt.GetoptError:
+    printHelp()
+    sys.exit(2)
+for opt, arg in opts:
+    if opt in ("-p", "--port"):
+        port = arg
+    elif opt in ("-h", "--help"):
+        printHelp()
+        sys.exit()
+    elif opt in ("-v", "--version"):
+        sys.exit()
+
 # start the server
-server_address = ('', 8000)
+print 'Binding to port', int(port)
+server_address = ('', int(port))
 httpd = BaseHTTPServer.HTTPServer(server_address, TmrdRequestHandler)
 httpd.serve_forever()
